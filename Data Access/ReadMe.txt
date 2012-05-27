@@ -1,1 +1,1 @@
-DdAccessImplemtation has the code to learn hwo to use DbAccess.
+DdAccessImplemtation has the code to learn how to use DbAccess.
