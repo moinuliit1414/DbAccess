@@ -9,7 +9,7 @@ using DbAccessLinQ;
 
 namespace DbAccess
 {
-
+    //Create the class that will define the table to query against.
     public class Products : Db
     {
         public Products(string conn)
@@ -26,26 +26,26 @@ namespace DbAccess
 		
             #region My Reader API
             
-			//Configura la conexión a la base de datos en este caso Northwind. ["Query"] es el nombre de mi connectionString.
-            var db = new Products(ConfigurationManager.ConnectionStrings["Query"].ConnectionString);
+	   //Configura la conexiï¿½n a la base de datos en este caso Northwind. ["Query"] es el nombre de mi connectionString.
+            var db = new Products("Query");
 			
 			
 			
 			
 			
-			//Crea una lista de parámetros, mantiene la Consulta lo más limpia posible y evitar el (Sql Injection)
+	   //Crea una lista de parï¿½metros, mantiene la Consulta lo mï¿½s limpia posible y evitar el (Sql Injection)
             var param = new List<SqlParameter> { new SqlParameter("@CategoryID", 5) };
 			
 			
 			
 			
 			
-			//Consulta la tabla de products filtrando por CategoryID, luego pasa una lista de Sqlparameters al argumento opcional param y luego convierte el resultado del CurrentTable a un dynamic para poder acceder
-			//A las propiedades en tiempo de ejecución y tener un codigo más limpio y legible.
+	    //Consulta la tabla de products filtrando por CategoryID, luego pasa una lista de Sqlparameters al argumento opcional param y luego convierte el resultado del CurrentTable a un dynamic para poder acceder
+	    //A las propiedades en tiempo de ejecuciï¿½n y tener un codigo mï¿½s limpio y legible.
             var products = db.CurrentTable().ToDynamic(); // Select * From Products
 			
 			
-			//Accede a los miembros de la clase en tiempo de ejecucion: OJO(Tienes que saber cuales son las columnas para que no te de un RuntimeBinderException)
+	    //Accede a los miembros de la clase en tiempo de ejecucion: OJO(Tienes que saber cuales son las columnas para que no te de un RuntimeBinderException)
             foreach (var item in products)
             {
                 Console.WriteLine("{0}", item.ProductName);
@@ -53,8 +53,8 @@ namespace DbAccess
 			
 			
 			
-			//Tambien puedes especificar las  columnas que devuelve CurrentTable, usar Where y Order By.
-			var columns = new List<string> { "ProductID", "ProductName" };
+	    //Tambien puedes especificar las  columnas que devuelve CurrentTable, usar Where y Order By.
+	    var columns = new List<string> { "ProductID", "ProductName" };
             var products = db.CurrentTable(where: "CategoryID =@CategoryID", orderby: "ProductName", columns: columns, args: param).ToDynamic();
 
             foreach (var item in products)
@@ -64,7 +64,7 @@ namespace DbAccess
 			
 			
             //Data tables
-			//Tambien puedes retornar un DataTable del reader que invocaste junto
+	    //Tambien puedes retornar un DataTable del reader que invocaste junto
             var dataTable = db.CurrentTable(where: "CategoryID =@CategoryID", args: param).ToDataTable();
 
             foreach (DataRow item in dataTable.Rows)
@@ -76,7 +76,7 @@ namespace DbAccess
 			
 			
 			
-			//Stored Procedures 
+	    //Stored Procedures 
             List<SqlParameter> spParam = new List<SqlParameter>
             {
                 new SqlParameter("@ProductID",5),
