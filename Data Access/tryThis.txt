@@ -1,0 +1,71 @@
+Assume Products product model is like this
+
+public partial class Products 
+    {
+        public Guid ProductsId { get; set; }
+        public string ProductsName { get; set; }
+        public Double ProductsPrice { get; set; }
+        public int PolicyQuantity  { get; set; }
+    }
+
+//I just copy this from your given link
+
+
+public static class Helper
+{
+    /// <summary>
+    /// Converts a DataTable to a list with generic objects
+    /// </summary>
+    /// <typeparam name="T">Generic object</typeparam>
+    /// <param name="table">DataTable</param>
+    /// <returns>List with generic objects</returns>
+    public static List<T> DataTableToList<T>(this DataTable table) where T : class, new()
+    {
+        try
+        {
+            List<T> list = new List<T>();
+
+            foreach (var row in table.AsEnumerable())
+            {
+                T obj = new T();
+
+                foreach (var prop in obj.GetType().GetProperties())
+                {
+                    try
+                    {
+                        PropertyInfo propertyInfo = obj.GetType().GetProperty(prop.Name);
+                        propertyInfo.SetValue(obj, Convert.ChangeType(row[prop.Name], propertyInfo.PropertyType), null);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                }
+
+                list.Add(obj);
+            }
+
+            return list;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+}
+
+
+
+//Tambien puedes especificar las  columnas que devuelve CurrentTable, usar Where y Order By.
+var columns = new List<string> { "ProductID", "ProductName" };
+var products = Extensions.ToDataTable(db.CurrentTable(where: "CategoryID =@CategoryID", orderby: "ProductName", columns: columns, args: param));
+
+var list=Helper.DataTableToList<Products>(products);
+
+//My contact info
+Mob:+8801721889007
+Skype:moinul1414
+Email:moinul39.iit@gmail.com
+Github:https://github.com/moinuliit1414
+
+Note: please ingore typo mistke.I type this code on notepade.  
